@@ -142,4 +142,9 @@ Cordova.prototype.build = function (platform, callback) {
     return cmd(buildCommand('build', platform), this.path, callback);
 };
 
+/**
+ * Expose cmg for supporting additional tooling
+ */
+Cordova.prototype.cmd = cmd;
+
 module.exports = Cordova;
