@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/eiskis/node-cordova",
   "dependencies": {
-    "cordova": "6.1.*"
+    "cordova": "^6.1.1"
   }
 }
