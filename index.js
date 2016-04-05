@@ -62,7 +62,7 @@ var Cordova = function (path) {
  * @return {String|undefined}
  */
 Cordova.prototype.create = function (packageName, name, callback) {
-    return cmd(buildCommand('create', this.path, packageName, name), this.path, callback);
+    return cmd(buildCommand('create', './', packageName, name), this.path, callback);
 };
 
 /**
