@@ -1,3 +1,6 @@
+# About this fork
+This is created as a quick and dirty fix for some issues with the `node-cordova` package for a custom project. Don't use it and expect it to work for you.
+
 # node-cordova
 Wrapper for the Cordova CLI that you can use programmatically directly from Node.js.
 

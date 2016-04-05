@@ -12,6 +12,26 @@ var CORDOVA_PATH = path.join(
     'cordova'
 );
 
+var CORDOVA_PATH_HACKED = path.join(
+    __dirname,
+    '../../',
+    'node_modules',
+    'cordova',
+    'bin',
+    'cordova'
+);
+
+/**
+ * Constructs a new Cordova instance. This represents a Cordova application
+ * at the given path.
+ * @constructor
+ * @param {String} path Path of the cordova application
+ */
+var Cordova = function (path, useHackedPath) {
+    this.path = path;
+    this.useHackedPath = useHackedPath;
+};
+
 /**
  * Executes a terminal command
  * @param  {String}   cmd      Command to execute
@@ -19,7 +39,7 @@ var CORDOVA_PATH = path.join(
  * @param  {Function} callback Callback only if the command is async
  * @return {String|undefined}
  */
-var cmd = function (cmd, cwd, callback) {
+Cordova.prototype.cmd = function (cmd, cwd, callback) {
     var async = typeof callback === 'function';
 
     var result = exec(
@@ -35,21 +55,11 @@ var cmd = function (cmd, cwd, callback) {
  * Builds a command escaping all command parts
  * @return {String} Final command
  */
-var buildCommand = function () {
-    return [CORDOVA_PATH]
+Cordova.prototype.buildCommand = function () {
+    return [(this.useHackedPath ? CORDOVA_PATH_HACKED : CORDOVA_PATH)]
         .concat(Array.prototype.map.call(arguments || [], function (arg) {
             return '\'' + arg.replace("'", "\\'") + '\'';
         })).join(' ');
-};
-
-/**
- * Constructs a new Cordova instance. This represents a Cordova application
- * at the given path.
- * @constructor
- * @param {String} path Path of the cordova application
- */
-var Cordova = function (path) {
-    this.path = path;
 };
 
 /**
@@ -62,7 +72,7 @@ var Cordova = function (path) {
  * @return {String|undefined}
  */
 Cordova.prototype.create = function (packageName, name, callback) {
-    return cmd(buildCommand('create', './', packageName, name), this.path, callback);
+    return this.cmd(this.buildCommand('create', './', packageName, name), this.path, callback);
 };
 
 /**
@@ -73,7 +83,7 @@ Cordova.prototype.create = function (packageName, name, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.addPlatform = function (platform, callback) {
-    return cmd(buildCommand('platform', 'add', platform), this.path, callback);
+    return this.cmd(this.buildCommand('platform', 'add', platform), this.path, callback);
 };
 
 /**
@@ -84,7 +94,7 @@ Cordova.prototype.addPlatform = function (platform, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.removePlatform = function (platform, callback) {
-    return cmd(buildCommand('platform', 'rm', platform), this.path, callback);
+    return this.cmd(this.buildCommand('platform', 'rm', platform), this.path, callback);
 };
 
 /**
@@ -95,7 +105,7 @@ Cordova.prototype.removePlatform = function (platform, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.addPlugin = function (plugin, callback) {
-    return cmd(buildCommand('plugin', 'add', plugin), this.path, callback);
+    return this.cmd(this.buildCommand('plugin', 'add', plugin), this.path, callback);
 };
 
 /**
@@ -106,7 +116,7 @@ Cordova.prototype.addPlugin = function (plugin, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.removePlugin = function (plugin, callback) {
-    return cmd(buildCommand('plugin', 'rm', plugin), this.path, callback);
+    return this.cmd(this.buildCommand('plugin', 'rm', plugin), this.path, callback);
 };
 
 /**
@@ -117,7 +127,7 @@ Cordova.prototype.removePlugin = function (plugin, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.prepare = function (platform, callback) {
-    return cmd(buildCommand('prepare', platform), this.path, callback);
+    return this.cmd(this.buildCommand('prepare', platform), this.path, callback);
 };
 
 /**
@@ -128,7 +138,7 @@ Cordova.prototype.prepare = function (platform, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.compile = function (platform, callback) {
-    return cmd(buildCommand('compile', platform), this.path, callback);
+    return this.cmd(this.buildCommand('compile', platform), this.path, callback);
 };
 
 /**
@@ -139,12 +149,7 @@ Cordova.prototype.compile = function (platform, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.build = function (platform, callback) {
-    return cmd(buildCommand('build', platform), this.path, callback);
+    return this.cmd(this.buildCommand('build', platform), this.path, callback);
 };
-
-/**
- * Expose cmg for supporting additional tooling
- */
-Cordova.prototype.cmd = cmd;
 
 module.exports = Cordova;
