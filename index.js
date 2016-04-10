@@ -105,7 +105,7 @@ Cordova.prototype.removePlatform = function (platform, callback) {
  * @return {String|undefined}
  */
 Cordova.prototype.addPlugin = function (plugin, callback) {
-    return this.cmd(this.buildCommand('plugin', 'add', plugin), this.path, callback);
+    return this.cmd(this.buildCommand('plugin', 'add', plugin, '--force'), this.path, callback);
 };
 
 /**
@@ -150,6 +150,17 @@ Cordova.prototype.compile = function (platform, callback) {
  */
 Cordova.prototype.build = function (platform, callback) {
     return this.cmd(this.buildCommand('build', platform), this.path, callback);
+};
+
+/**
+ * Builds the app for the given platform (is an equivalent of preparing and compiling)
+ * @method build
+ * @param  {String}   platform Platform name
+ * @param  {Function} callback Callback if async
+ * @return {String|undefined}
+ */
+Cordova.prototype.buildDevice = function (platform, callback) {
+    return this.cmd(this.buildCommand('build', platform, '--device'), this.path, callback);
 };
 
 module.exports = Cordova;
